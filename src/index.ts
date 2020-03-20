@@ -48,13 +48,18 @@ export async function runServer(opts: Options): Promise<void> {
 }
 
 export async function main(...args: string[]): Promise<void> {
-  const opts = getOptionsFromArgs(...args);
-  autoDiscover(opts);
+  try {
+    const opts = getOptionsFromArgs(...args);
+    autoDiscover(opts);
 
-  if (opts.once) {
-    await printOnce(opts);
-  } else {
-    await runServer(opts);
+    if (opts.once) {
+      await printOnce(opts);
+    } else {
+      await runServer(opts);
+    }
+  } catch (ex) {
+    console.error(ex);
+    throw ex;
   }
 }
 
