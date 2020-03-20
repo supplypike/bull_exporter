@@ -64,6 +64,9 @@ export async function makeServer(opts: Options): Promise<express.Application> {
   });
 
   if (opts.autoDiscover) {
+    setInterval(() => {
+      collector.discoverAll();
+    }, 1000);
     await collector.discoverAll();
   }
 
