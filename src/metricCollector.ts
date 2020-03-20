@@ -50,6 +50,7 @@ export class MetricCollector {
     this.logger = logger || globalLogger;
     this.addToQueueSet(queueNames);
     this.guages = makeGuages(metricPrefix, registers);
+    this.autoDiscover = autoDiscover;
   }
 
   private createClient(_type: 'client' | 'subscriber' | 'bclient', redisOpts?: IoRedis.RedisOptions): IoRedis.Redis {
