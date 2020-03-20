@@ -36,7 +36,7 @@ export class MetricCollector {
   private readonly myListeners: Set<(id: string) => Promise<void>> = new Set();
 
   private readonly guages: QueueGauges;
-
+  private readonly autoDiscover: boolean;
   constructor(
     queueNames: string[],
     opts: MetricCollectorOptions,
@@ -121,6 +121,9 @@ export class MetricCollector {
   }
 
   public async ping(): Promise<void> {
+    if (this.autoDiscover) {
+      await this.discoverAll();
+    }
     await this.defaultRedisClient.ping();
   }
 
