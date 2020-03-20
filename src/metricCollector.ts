@@ -49,6 +49,12 @@ export class MetricCollector {
     this.logger = logger || globalLogger;
     this.addToQueueSet(queueNames);
     this.guages = makeGuages(metricPrefix, registers);
+
+    if (autoDiscover) {
+      setInterval(() => {
+        this.discoverAll();
+      }, 60 * 10 * 1000);
+    }
   }
 
   private createClient(_type: 'client' | 'subscriber' | 'bclient', redisOpts?: IoRedis.RedisOptions): IoRedis.Redis {
@@ -76,7 +82,7 @@ export class MetricCollector {
   }
 
   public async discoverAll(): Promise<void> {
-    const keyPattern = new RegExp(`^${this.bullOpts.prefix}:([\w:]+):(id|failed|active|waiting|stalled-check)$`);
+    const keyPattern = new RegExp(`^${this.bullOpts.prefix}:([\\w:]+):(id|failed|active|waiting|stalled-check)$`);
     this.logger.info({ pattern: keyPattern.source }, 'running queue discovery');
 
     const keyStream = this.defaultRedisClient.scanStream({

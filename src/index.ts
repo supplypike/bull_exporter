@@ -25,23 +25,6 @@ export async function printOnce(opts: Options): Promise<void> {
   console.log(promClient.register.metrics());
 }
 
-export function autoDiscover(opts: Options): void {
-  const collector = new MetricCollector(opts._, {
-    logger,
-    metricPrefix: opts.metricPrefix,
-    redis: opts.url,
-    prefix: opts.prefix,
-    autoDiscover: opts.autoDiscover
-  });
-  if (!opts.autoDiscover) {
-    return;
-  }
-
-  setInterval(() => {
-    collector.discoverAll();
-  }, 60 * 10 * 1000);
-}
-
 export async function runServer(opts: Options): Promise<void> {
   const { done } = await startServer(opts);
   await done;
@@ -50,7 +33,6 @@ export async function runServer(opts: Options): Promise<void> {
 export async function main(...args: string[]): Promise<void> {
   try {
     const opts = getOptionsFromArgs(...args);
-    autoDiscover(opts);
 
     if (opts.once) {
       await printOnce(opts);
