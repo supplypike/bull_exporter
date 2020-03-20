@@ -36,7 +36,6 @@ export class MetricCollector {
   private readonly myListeners: Set<(id: string) => Promise<void>> = new Set();
 
   private readonly guages: QueueGauges;
-  private readonly autoDiscover: boolean;
   constructor(
     queueNames: string[],
     opts: MetricCollectorOptions,
@@ -50,7 +49,6 @@ export class MetricCollector {
     this.logger = logger || globalLogger;
     this.addToQueueSet(queueNames);
     this.guages = makeGuages(metricPrefix, registers);
-    this.autoDiscover = autoDiscover;
   }
 
   private createClient(_type: 'client' | 'subscriber' | 'bclient', redisOpts?: IoRedis.RedisOptions): IoRedis.Redis {
