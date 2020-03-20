@@ -117,9 +117,6 @@ export class MetricCollector {
   }
 
   public async updateAll(): Promise<void> {
-    if (this.autoDiscover) {
-      await this.discoverAll();
-    }
     const updatePromises = this.queues.map(q => getStats(q.prefix, q.name, q.queue, this.guages));
     await Promise.all(updatePromises);
   }
